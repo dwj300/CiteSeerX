@@ -53,7 +53,7 @@
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
-  <bean id="docDAO" class="edu.psu.citeseerx.dao2.DocumentDAOImpl" lazy-init="true">
+  <bean id="docDAO" class="edu.psu.citeseerx.dao2.DocumentSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
@@ -116,7 +116,7 @@
   </bean>
 
 
-  <bean id="citeseerx" class="edu.psu.citeseerx.dao2.logic.CSXDAOImpl">
+  <bean id="citeseerx" class="edu.psu.citeseerx.dao2.logic.CSXSolrImpl">
 	<property name="ackDAO" ref="ackDAO"/>
 	<property name="adminDAO" ref="adminDAO"/>
 	<property name="authDAO" ref="authorDAO"/>

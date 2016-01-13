@@ -44,9 +44,9 @@ import com.google.common.base.CharMatcher;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
 import edu.psu.citeseerx.dao2.logic.CSXDAO;
@@ -82,7 +82,7 @@ public class IndexUpdateManager {
 
     protected final Log logger = LogFactory.getLog(getClass());
     private boolean redoAll;
-    private SolrServer solrServer;
+    private SolrClient solrServer;
     private long lastIndexedCluster;
     private final int indexBatchSize = 1000;
 
@@ -92,7 +92,7 @@ public class IndexUpdateManager {
         int cpus = Runtime.getRuntime().availableProcessors();
 
         this.solrUpdateUrl = new URL(solrUpdateUrl);
-        this.solrServer = new ConcurrentUpdateSolrServer(solrUpdateUrl, indexBatchSize, cpus);
+        this.solrServer = new ConcurrentUpdateSolrClient(solrUpdateUrl, indexBatchSize, cpus);
     } //- setSolrURL
 
 
