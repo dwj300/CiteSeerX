@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Penn State University
+ * Copyright 2007 Penn State University
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -32,21 +32,17 @@ import edu.psu.citeseerx.utility.SafeText;
 import edu.psu.citeseerx.webutils.RedirectUtils;
 import edu.psu.citeseerx.myciteseer.domain.Account;
 import edu.psu.citeseerx.dao2.RepositoryMap;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.RuntimeException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -89,13 +85,11 @@ public class ViewDocController implements Controller {
 
 
 	/* (non-Javadoc)
-     * @see org.springframework.web.servlet.mvc.Controller#handleRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+	 * @see org.springframework.web.servlet.mvc.Controller#handleRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
 	public ModelAndView handleRequest(HttpServletRequest request,
 									  HttpServletResponse response)
 			throws ServletException, IOException {
-
-		SolrClient server =  new HttpSolrClient("http://localhost:8983/solr/papers");
 
 		String errorTitle = "Document Not Found";
 		String dmcaTitle = "DMCA Notice";
@@ -116,7 +110,6 @@ public class ViewDocController implements Controller {
 				model.put("pagetitle", errorTitle);
 				return new ModelAndView("viewDocError", model);
 			}
-			// todo
 			List<String> dois = citedao.getPaperIDs(cluster);
 			if(!dois.isEmpty()) {
 				doi = dois.get(0);
@@ -158,182 +151,135 @@ public class ViewDocController implements Controller {
 			bsysData = Boolean.parseBoolean(sysData);
 		} catch (Exception e) {}
 
-		//Document doc = null;
-        /*try {
-            doc = csxdao.getDocumentFromDB(doi, false, bsrc);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
-		SolrQuery query = new SolrQuery();
-		query.setQuery("id:\"" + doi + "\"");
-
-		QueryResponse resp = null;
+		Document doc = null;
 		try {
-			resp = server.query(query);
-		} catch (SolrServerException e) {
+			doc = csxdao.getDocumentFromDB(doi, false, bsrc);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-
-		if (resp.getResults().getNumFound() == 0) {
-			//if (doc == null) {
+		if (doc == null) {
 			model.put("doi", doi);
 			model.put("pagetitle", errorTitle);
 			return new ModelAndView("baddoi", model);
 		}
-
-		SolrDocument solrDoc = resp.getResults().get(0);
-
-		//todo
-        /*else if(doc.getState() == DocumentProperties.IS_PDFREDIRECT) {
-            //
-            PDFRedirect pdfredirect = csxdao.getPDFRedirect(doi);
-            pdfRedirectURL = this.generateRedirectURL(pdfredirect);
-            pdfRedirectLabel = pdfredirect.getLabel();
-        }*/
-		// todo
-        /*else if(doc.isDMCA() == true) {
-            model.put("doi", doi);
-            model.put("pagetitle", dmcaTitle);
-            return new ModelAndView("dmcaPage", model);
-        }*/
-		// todo
-        /*
-        else if(doc.isRemoved() == true) {
-            response.setStatus(404);
-            return new ModelAndView("null",model);
-        }*/
-		// todo
-        /*
-        else if (doc.isPublic() == false) {
-            model.put("doi", doi);
-            model.put("pagetitle", removedTitle);
-                        response.setStatus(404);
-            return new ModelAndView("docRemovedPage", model);
-        }*/
-
-        /*if (bxml) {
-            response.getWriter().print(
-                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            Account account = MCSUtils.getLoginAccount();
-            if (bsysData && account != null && account.isAdmin()) {
-                response.getWriter().print(doc.toXML(true));
-            } else {
-                response.getWriter().print(doc.toXML(false));
-            }
-            return null;
-            //return new ModelAndView("xml", model);
-        }*/
-
-        /*List<UniqueAuthor> uauthors = new ArrayList<UniqueAuthor>();
-        String authors = "";
-
-        int c = 1;
-        for (Author a : doc.getAuthors()) {
-            String authorName = a.getDatum(Author.NAME_KEY);
-            authors += authorName + ", ";
-
-            // convert to unique authors
-            UniqueAuthor uauth = new UniqueAuthor();
-            uauth.setCanname(authorName);
-            if (a.getClusterID() > 0) {
-                uauth.setAid("");
-            }
-            uauthors.add(uauth);
-            c++;
-        }
-        if (authors.length() == 0) {
-            authors = "Unknown Authors";
-        }else{
-            // There is always a final comma.
-            authors = authors.substring(0, authors.lastIndexOf(","));
-        }*/
-
-		//String title = doc.getDatum(Document.TITLE_KEY);
-		//String abs =  doc.getDatum(Document.ABSTRACT_KEY);
-		//String venue = doc.getDatum(Document.VENUE_KEY);
-		//String year = doc.getDatum(Document.YEAR_KEY);
-
-		//DocumentFileInfo finfo = doc.getFileInfo();
-		//String rep = finfo.getDatum(DocumentFileInfo.REP_ID_KEY);
-		String repID = solrDoc.getFieldValue("repositoryID").toString();
-
-		Long clusterID = (Long)solrDoc.getFieldValue("cluster");
-
-		//List<String> urls = getClusterURLs(doc.getClusterID());
-		List<String> urls = getClusterURLs(clusterID);
-
-		//Long clusterID = doc.getClusterID();
-		List<ThinDoc> citations = null;
-		if (clusterID != null) {
-			citations = citedao.getCitedDocuments(clusterID, 0, 50);
-			for (Object cite : citations) {
-				SolrSelectUtils.prepCitation((ThinDoc)cite);
-			}
-			Collections.sort(citations, new CitationComparator());
+		else if(doc.getState() == DocumentProperties.IS_PDFREDIRECT) {
+			//
+			PDFRedirect pdfredirect = csxdao.getPDFRedirect(doi);
+			pdfRedirectURL = this.generateRedirectURL(pdfredirect);
+			pdfRedirectLabel = pdfredirect.getLabel();
+		}
+		else if(doc.isDMCA() == true) {
+			model.put("doi", doi);
+			model.put("pagetitle", dmcaTitle);
+			return new ModelAndView("dmcaPage", model);
+		}
+		else if(doc.isRemoved() == true) {
+			response.setStatus(404);
+			return new ModelAndView("null",model);
+		}
+		else if (doc.isPublic() == false) {
+			model.put("doi", doi);
+			model.put("pagetitle", removedTitle);
+			response.setStatus(404);
+			return new ModelAndView("docRemovedPage", model);
 		}
 
-		List<String> citationContexts = new ArrayList<String>();
-		for (ThinDoc citation : citations){
-			String context = citedao.getContext(clusterID, citation.getCluster());
-			if (context != null){
-				citationContexts.add(context);
-			} else{
-				citationContexts.add("");
+
+
+		if (bxml) {
+			response.getWriter().print(
+					"<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			Account account = MCSUtils.getLoginAccount();
+			if (bsysData && account != null && account.isAdmin()) {
+				response.getWriter().print(doc.toXML(true));
+			} else {
+				response.getWriter().print(doc.toXML(false));
 			}
+			return null;
+			//return new ModelAndView("xml", model);
 		}
 
-		//String repID = doc.getFileInfo().getDatum(DocumentFileInfo.REP_ID_KEY);
-        /*
-        // Obtain citation chart data.
-        String chartData = csxdao.getCiteChartData(doi);
+		List<UniqueAuthor> uauthors = new ArrayList<UniqueAuthor>();
+		String authors = "";
 
-        String bibtex = BiblioTransformer.toBibTeX(DomainTransformer.toThinDoc(doc));
-        bibtex = SafeText.cleanXML(bibtex);
-        bibtex = bibtex.replaceAll("\\n", "<br/>");
-        bibtex = bibtex.replaceAll("\\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
-        model.put("bibtex", bibtex);
+		int c = 1;
+		for (Author a : doc.getAuthors()) {
+			String authorName = a.getDatum(Author.NAME_KEY);
+			authors += authorName + ", ";
 
-        String coins =
-                BiblioTransformer.toCOinS(DomainTransformer.toThinDoc(doc),
-                        request.getRequestURL().toString());
-        model.put("coins", coins);
+			// convert to unique authors
+			UniqueAuthor uauth = new UniqueAuthor();
+			uauth.setCanname(authorName);
+			if (a.getClusterID() > 0) {
+				uauth.setAid("");
+			}
+			uauthors.add(uauth);
+			c++;
+		}
+		if (authors.length() == 0) {
+			authors = "Unknown Authors";
+		}else{
+			// There is always a final comma.
+			authors = authors.substring(0, authors.lastIndexOf(","));
+		}
 
-        List<Tag> tags = doc.getTags();
-        if (tags.size() > maxTags) {
-            tags = tags.subList(0, maxTags);
-        }
+		String title = doc.getDatum(Document.TITLE_KEY);
+		String abs =  doc.getDatum(Document.ABSTRACT_KEY);
+		String venue = doc.getDatum(Document.VENUE_KEY);
+		String year = doc.getDatum(Document.YEAR_KEY);
 
-        List<ExternalLink> eLinks = csxdao.getExternalLinks(doi);
+		DocumentFileInfo finfo = doc.getFileInfo();
+		String rep = finfo.getDatum(DocumentFileInfo.REP_ID_KEY);
+		List<String> urls = getClusterURLs(doc.getClusterID());
 
-        // Obtain the hubUrls that points to this document.
-        List<Hub> hubUrls = csxdao.getHubs(doi);
-        */
+		Long clusterID = doc.getClusterID();
+
+		String repID = doc.getFileInfo().getDatum(DocumentFileInfo.REP_ID_KEY);
+
+		String bibtex =
+				BiblioTransformer.toBibTeX(DomainTransformer.toThinDoc(doc));
+		bibtex = SafeText.cleanXML(bibtex);
+		bibtex = bibtex.replaceAll("\\n", "<br/>");
+		bibtex = bibtex.replaceAll("\\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+		model.put("bibtex", bibtex);
+
+		String coins =
+				BiblioTransformer.toCOinS(DomainTransformer.toThinDoc(doc),
+						request.getRequestURL().toString());
+		model.put("coins", coins);
+
+		List<Tag> tags = doc.getTags();
+		if (tags.size() > maxTags) {
+			tags = tags.subList(0, maxTags);
+		}
+
+		List<ExternalLink> eLinks = csxdao.getExternalLinks(doi);
+
+		// Obtain the hubUrls that points to this document.
+		List<Hub> hubUrls = csxdao.getHubs(doi);
+
 		model.put("pagetype", "summary");
-		model.put("pagetitle", solrDoc.getFieldValue("title"));
+		model.put("pagetitle", title);
 		model.put("pagedescription", "Document Details (Isaac Councill, " +
-				"Lee Giles, Pradeep Teregowda): " + solrDoc.getFieldValue("abstract"));
-		//model.put("pagekeywords", authors);
-		model.put("title", solrDoc.getFieldValue("title"));
-		//model.put("authors", authors);
-		//model.put("uauthors", uauthors);
-		model.put("abstractText", solrDoc.getFieldValue("abstract"));
-		model.put("venue", solrDoc.getFieldValue("venue"));
-		model.put("year", solrDoc.getFieldValue("year"));
+				"Lee Giles, Pradeep Teregowda): " + abs);
+		model.put("pagekeywords", authors);
+		model.put("title", title);
+		model.put("authors", authors);
+		model.put("uauthors", uauthors);
+		model.put("abstractText", abs);
+		model.put("venue", venue);
+		model.put("year", year);
 		model.put("urls", urls);
 		model.put("doi", doi);
 		model.put("clusterid", clusterID);
-		model.put("rep", repID);
-		model.put("ncites", solrDoc.getFieldValue("ncites"));
-		model.put("selfCites", solrDoc.getFieldValue("selfCites"));
-		//model.put("tags", tags);
-		model.put("citations", citations);
-		model.put("citationContexts", citationContexts);
-		//model.put("elinks", eLinks);
+		model.put("rep", rep);
+		model.put("ncites", doc.getNcites());
+		model.put("selfCites", doc.getSelfCites());
+		model.put("tags", tags);
+		model.put("elinks", eLinks);
 		model.put("fileTypes", csxdao.getFileTypes(doi, repID));
-		//model.put("chartdata", chartData);
-		//model.put("hubUrls", hubUrls);
+		model.put("hubUrls", hubUrls);
 		model.put("pdfRedirectUrl", pdfRedirectURL);
 		model.put("pdfRedirectLabel", pdfRedirectLabel);
 
@@ -371,16 +317,3 @@ public class ViewDocController implements Controller {
 	}
 
 }  //- ViewDocController
-
-
-class CitationComparator implements Comparator<ThinDoc> {
-	public int compare(ThinDoc o1, ThinDoc o2) {
-		if (o1.getNcites() > o2.getNcites()) {
-			return -1;
-		}
-		if (((ThinDoc)o1).getNcites() < ((ThinDoc)o2).getNcites()) {
-			return 1;
-		}
-		return 0;
-	} //- compare
-} //- class CitationComparator
