@@ -235,7 +235,7 @@ public class ViewDocController implements Controller {
 
 		Long clusterID = doc.getClusterID();
 
-                String repID = doc.getFileInfo().getDatum(DocumentFileInfo.REP_ID_KEY);
+		String repID = doc.getFileInfo().getDatum(DocumentFileInfo.REP_ID_KEY);
 
 		String bibtex =
 				BiblioTransformer.toBibTeX(DomainTransformer.toThinDoc(doc));
@@ -270,7 +270,7 @@ public class ViewDocController implements Controller {
 		model.put("title", title);            
 		model.put("authors", authors);
 		model.put("uauthors", uauthors);
-		model.put("abstract", abs);
+		model.put("abstractText", abs);
 		model.put("venue", venue);
 		model.put("year", year);
 		model.put("urls", urls);

@@ -1,13 +1,14 @@
 package edu.psu.citeseerx.dao2;
 
-import edu.psu.citeseerx.domain.Document;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.dao.DataAccessException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
-
+import java.util.Date;
+import edu.psu.citeseerx.domain.*;
+import java.text.DateFormat;
 
 /**
  * Created by Doug on 1/20/16.
@@ -24,6 +25,7 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
     public Document getDocument(String doi, boolean getSource)
             throws DataAccessException {
         // todo: use a bean
+        // todo: handle getsource
         if (solr == null) {
             solr = new HttpSolrClient(SOLR_URL);
         }
@@ -46,12 +48,44 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
 
         Document doc = new Document();
 
-        for (String key : Document.getKeys()) {
+        String[] keys = {Document.TITLE_KEY, Document.ABSTRACT_KEY, Document.YEAR_KEY, Document.VENUE_KEY,
+                         Document.VEN_TYPE_KEY, Document.PAGES_KEY, Document.VOL_KEY, Document.PUBLISHER_KEY,
+                         Document.PUBADDR_KEY, Document.TECH_KEY };
+
+        for (String key : keys) {
             Object obj = solrDoc.getFieldValue(key);
             if (obj != null) {
-                doc.setSource(key, obj.toString());
+                doc.setDatum(key, obj.toString());
             }
         }
+
+        doc.setDatum(Document.DOI_KEY, solrDoc.getFieldValue("id").toString());
+        doc.setVersion((int)solrDoc.getFieldValue("version"));
+        doc.setClusterID((long)solrDoc.getFieldValue("cluster"));
+
+        doc.setNcites((int)solrDoc.getFieldValue("ncites"));
+        doc.setSelfCites((int)solrDoc.getFieldValue("selfCites"));
+        doc.setVersionName(solrDoc.getFieldValue("versionName").toString());
+        doc.setState((int)solrDoc.getFieldValue("public"));
+/*
+            if (rs.getBoolean("public")) {
+                doc.setState(DocumentProperties.IS_PUBLIC);
+            }
+	    else{
+                doc.setState(DocumentProperties.LOGICAL_DELETE);
+            }
+*/
+        doc.setVersionTime((Date)solrDoc.getFieldValue("versionTime"));
+
+        DocumentFileInfo finfo = new DocumentFileInfo();
+        finfo.setDatum(DocumentFileInfo.CRAWL_DATE_KEY, DateFormat.getDateInstance().format((Date)solrDoc.getFieldValue("crawlDate")));
+        finfo.setDatum(DocumentFileInfo.REP_ID_KEY, solrDoc.getFieldValue("repositoryID").toString());
+        finfo.setDatum(DocumentFileInfo.CONV_TRACE_KEY, solrDoc.getFieldValue("conversionTrace").toString());
+        doc.setFileInfo(finfo);
+
+
+
+
 
         return doc;
 
