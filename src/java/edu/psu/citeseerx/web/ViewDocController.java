@@ -88,8 +88,8 @@ public class ViewDocController implements Controller {
 	 * @see org.springframework.web.servlet.mvc.Controller#handleRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	public ModelAndView handleRequest(HttpServletRequest request,
-									  HttpServletResponse response)
-			throws ServletException, IOException {
+			HttpServletResponse response)
+					throws ServletException, IOException {
 
 		String errorTitle = "Document Not Found";
 		String dmcaTitle = "DMCA Notice";
@@ -164,7 +164,7 @@ public class ViewDocController implements Controller {
 			return new ModelAndView("baddoi", model);
 		}
 		else if(doc.getState() == DocumentProperties.IS_PDFREDIRECT) {
-			//
+			// 
 			PDFRedirect pdfredirect = csxdao.getPDFRedirect(doi);
 			pdfRedirectURL = this.generateRedirectURL(pdfredirect);
 			pdfRedirectLabel = pdfredirect.getLabel();
@@ -174,19 +174,19 @@ public class ViewDocController implements Controller {
 			model.put("pagetitle", dmcaTitle);
 			return new ModelAndView("dmcaPage", model);
 		}
-		else if(doc.isRemoved() == true) {
-			response.setStatus(404);
-			return new ModelAndView("null",model);
-		}
+                else if(doc.isRemoved() == true) {
+                        response.setStatus(404);
+                        return new ModelAndView("null",model);
+                }
 		else if (doc.isPublic() == false) {
 			model.put("doi", doi);
 			model.put("pagetitle", removedTitle);
-			response.setStatus(404);
+                        response.setStatus(404);
 			return new ModelAndView("docRemovedPage", model);
 		}
 
 
-
+		
 		if (bxml) {
 			response.getWriter().print(
 					"<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -194,7 +194,7 @@ public class ViewDocController implements Controller {
 			if (bsysData && account != null && account.isAdmin()) {
 				response.getWriter().print(doc.toXML(true));
 			} else {
-				response.getWriter().print(doc.toXML(false));
+				response.getWriter().print(doc.toXML(false));                
 			}
 			return null;
 			//return new ModelAndView("xml", model);
@@ -211,7 +211,7 @@ public class ViewDocController implements Controller {
 			// convert to unique authors
 			UniqueAuthor uauth = new UniqueAuthor();
 			uauth.setCanname(authorName);
-			if (a.getClusterID() > 0) {
+			if (a.getClusterID() > 0) {                        
 				uauth.setAid("");
 			}
 			uauthors.add(uauth);
@@ -235,7 +235,7 @@ public class ViewDocController implements Controller {
 
 		Long clusterID = doc.getClusterID();
 
-		String repID = doc.getFileInfo().getDatum(DocumentFileInfo.REP_ID_KEY);
+                String repID = doc.getFileInfo().getDatum(DocumentFileInfo.REP_ID_KEY);
 
 		String bibtex =
 				BiblioTransformer.toBibTeX(DomainTransformer.toThinDoc(doc));
@@ -245,7 +245,7 @@ public class ViewDocController implements Controller {
 		model.put("bibtex", bibtex);
 
 		String coins =
-				BiblioTransformer.toCOinS(DomainTransformer.toThinDoc(doc),
+				BiblioTransformer.toCOinS(DomainTransformer.toThinDoc(doc), 
 						request.getRequestURL().toString());
 		model.put("coins", coins);
 
@@ -267,10 +267,10 @@ public class ViewDocController implements Controller {
 		model.put("pagedescription", "Document Details (Isaac Councill, " +
 				"Lee Giles, Pradeep Teregowda): " + abs);
 		model.put("pagekeywords", authors);
-		model.put("title", title);
+		model.put("title", title);            
 		model.put("authors", authors);
 		model.put("uauthors", uauthors);
-		model.put("abstractText", abs);
+		model.put("abstract", abs);
 		model.put("venue", venue);
 		model.put("year", year);
 		model.put("urls", urls);
@@ -302,10 +302,10 @@ public class ViewDocController implements Controller {
 			for (String doi : dois) {
 				Document doc = csxdao.getDocumentFromDB(doi);
 				if (doc.isPublic() || doc.getState() == DocumentProperties.IS_PDFREDIRECT) { // added this to allow
-					// redirect urls to show
-					// links too - maybe need
-					// to change to check for
-					// not public ?
+																							 // redirect urls to show
+																							 // links too - maybe need
+																							 // to change to check for
+																							 // not public ?
 					DocumentFileInfo finfo = doc.getFileInfo();
 					urls.addAll(finfo.getUrls());
 				}
@@ -315,8 +315,8 @@ public class ViewDocController implements Controller {
 	} //- getClusterURLs
 
 	private String generateRedirectURL(PDFRedirect pdfredirect) {
-
-		return GeneratePDFRedirectURL.generateURLFromTemplate(pdfredirect.getUrlTemplate(),
+		
+		return GeneratePDFRedirectURL.generateURLFromTemplate(pdfredirect.getUrlTemplate(), 
 				pdfredirect.getExternaldoi());
 	}
 	
