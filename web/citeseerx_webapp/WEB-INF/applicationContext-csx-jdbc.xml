@@ -41,7 +41,7 @@
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
-  <bean id="authorDAO" class="edu.psu.citeseerx.dao2.AuthorDAOImpl" lazy-init="true">
+  <bean id="authorDAO" class="edu.psu.citeseerx.dao2.AuthorSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
