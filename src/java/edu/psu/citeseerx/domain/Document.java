@@ -515,6 +515,10 @@ implements Clusterable, XMLSerializable, XMLTagAttrConstants, Versionable {
         return true;
         
     }  //- sameAuthors
+
+    public static String[] getKeys() {
+        return fieldArray;
+    }
     
     
 }  //- class Document

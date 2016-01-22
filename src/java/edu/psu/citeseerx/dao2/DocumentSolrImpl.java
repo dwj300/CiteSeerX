@@ -46,31 +46,12 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
 
         Document doc = new Document();
 
-        Object title = solrDoc.getFieldValue("title");
-        Object abstractText = solrDoc.getFieldValue("abstract");
-        Object year = solrDoc.getFieldValue("year");
-        Object venue = solrDoc.getFieldValue("venue");
-        Object venueType = solrDoc.getFieldValue("venueType");
-        Object pages = solrDoc.getFieldValue("pages");
-        Object volume = solrDoc.getFieldValue("volume");
-        Object number = solrDoc.getFieldValue("number");
-        Object publisher = solrDoc.getFieldValue("publisher");
-        Object pubAddress = solrDoc.getFieldValue("pubAddress");
-        Object tech = solrDoc.getFieldValue("tech");
-        Object cites = solrDoc.getFieldValue("citations");
-
-        if (title != null) { doc.setSource(Document.TITLE_KEY, title.toString()); }
-        if (abstractText != null) { doc.setSource(Document.ABSTRACT_KEY, abstractText.toString()); }
-        if (year != null) { doc.setSource(Document.YEAR_KEY, year.toString()); }
-        if (venue != null) { doc.setSource(Document.VENUE_KEY, venue.toString()); }
-        if (venueType != null) { doc.setSource(Document.VEN_TYPE_KEY, venueType.toString()); }
-        if (pages != null) { doc.setSource(Document.PAGES_KEY, pages.toString()); }
-        if (volume != null) { doc.setSource(Document.VOL_KEY, volume.toString()); }
-        if (number != null) { doc.setSource(Document.NUM_KEY, number.toString()); }
-        if (publisher != null) { doc.setSource(Document.PUBLISHER_KEY, publisher.toString()); }
-        if (pubAddress != null) { doc.setSource(Document.PUBADDR_KEY, pubAddress.toString()); }
-        if (tech != null) { doc.setSource(Document.TECH_KEY, tech.toString()); }
-        if (cites != null) { doc.setSource(Document.CITES_KEY, cites.toString()); }
+        for (String key : Document.getKeys()) {
+            Object obj = solrDoc.getFieldValue(key);
+            if (obj != null) {
+                doc.setSource(key, obj.toString());
+            }
+        }
 
         return doc;
 
