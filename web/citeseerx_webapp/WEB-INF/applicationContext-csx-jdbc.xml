@@ -116,7 +116,7 @@
   </bean>
 
 
-  <bean id="citeseerx" class="edu.psu.citeseerx.dao2.logic.CSXSolrImpl">
+  <bean id="citeseerx" class="edu.psu.citeseerx.dao2.logic.CSXDAOImpl">
 	<property name="ackDAO" ref="ackDAO"/>
 	<property name="adminDAO" ref="adminDAO"/>
 	<property name="authDAO" ref="authorDAO"/>
