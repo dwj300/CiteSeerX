@@ -6,9 +6,12 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
+
+import java.util.ArrayList;
 import java.util.Date;
 import edu.psu.citeseerx.domain.*;
 import java.text.DateFormat;
+import java.util.List;
 
 /**
  * Created by Doug on 1/20/16.
@@ -19,9 +22,12 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
      */
 
     private static String SOLR_URL = "http://localhost:8983/solr/papers";
+
+    private static String NGRAM_SOLR_URL = "http://localhost:8983/solr/ngrams";
     private SolrClient solr;
+    private SolrClient ngramSolr;
 
-
+    @Override
     public Document getDocument(String doi, boolean getSource)
             throws DataAccessException {
         // todo: use a bean
@@ -83,11 +89,35 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
         finfo.setDatum(DocumentFileInfo.CONV_TRACE_KEY, solrDoc.getFieldValue("conversionTrace").toString());
         doc.setFileInfo(finfo);
 
-
-
-
-
         return doc;
 
     }  //- getDocument
+
+    @Override
+    public List<String> getKeyphrase(String doi)
+            throws DataAccessException {
+        if (ngramSolr == null) {
+            ngramSolr = new HttpSolrClient(NGRAM_SOLR_URL);
+        }
+
+        // TOOD: deal with sort
+        SolrQuery query = new SolrQuery();
+        query.setQuery("paper_id:\"" + doi + "\"");
+
+        QueryResponse resp = null;
+        try {
+            resp = ngramSolr.query(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        List<String> ngrams = new ArrayList<String>();
+
+        for (SolrDocument doc : resp.getResults()) {
+            ngrams.add(doc.getFieldValue("ngram").toString());
+        }
+        return ngrams;
+
+    } //- getKeyphrase
 }

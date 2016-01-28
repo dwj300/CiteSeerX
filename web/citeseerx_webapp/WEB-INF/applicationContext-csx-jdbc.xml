@@ -33,7 +33,7 @@
 
   <!-- =================== BUSINESS OBJECT DEFS ==================== -->
   
-  <bean id="ackDAO" class="edu.psu.citeseerx.dao2.AckDAOImpl" lazy-init="true">
+  <bean id="ackDAO" class="edu.psu.citeseerx.dao2.AckSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
@@ -45,7 +45,7 @@
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
-  <bean id="citationDAO" class="edu.psu.citeseerx.dao2.CitationDAOImpl" lazy-init="true">
+  <bean id="citationDAO" class="edu.psu.citeseerx.dao2.CitationSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
@@ -66,11 +66,11 @@
     <property name="repositoryMap" ref="repositoryMap"/>
   </bean>
 
-  <bean id="hubDAO" class="edu.psu.citeseerx.dao2.HubDAOImpl" lazy-init="true">
+  <bean id="hubDAO" class="edu.psu.citeseerx.dao2.HubSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
-  <bean id="keywordDAO" class="edu.psu.citeseerx.dao2.KeywordDAOImpl" lazy-init="true">
+  <bean id="keywordDAO" class="edu.psu.citeseerx.dao2.KeywordSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
@@ -78,7 +78,7 @@
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 
-  <bean id="tagDAO" class="edu.psu.citeseerx.dao2.TagDAOImpl" lazy-init="true">
+  <bean id="tagDAO" class="edu.psu.citeseerx.dao2.TagSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
 

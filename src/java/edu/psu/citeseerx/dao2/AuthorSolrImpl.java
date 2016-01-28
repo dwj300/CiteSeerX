@@ -19,6 +19,7 @@ public class AuthorSolrImpl extends AuthorDAOImpl {
     private static String SOLR_URL = "http://localhost:8983/solr/authors";
     private SolrClient solr;
 
+    @Override
     public List<Author> getDocAuthors(String doi, boolean getSource)
             throws DataAccessException {
         if (solr == null) {
