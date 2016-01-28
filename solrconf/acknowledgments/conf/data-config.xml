@@ -1,0 +1,20 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource" 
+              driver="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/citeseerx" 
+              user="root" 
+              password=""/>
+  <document>
+    <entity name="acknowledgment"  
+      pk="id"
+      query="SELECT id, cluster, name, entType, ackType, paperid from acknowledgments"
+      >
+      <field column="id" name="id"/>
+      <field column="cluster" name="cluster"/>
+      <field column="name" name="name"/>
+      <field column="entType" name="entType"/>
+      <field column="ackType" name="ackType"/>
+      <field column="paperid" name="paperid"/>
+     </entity>
+  </document>
+</dataConfig>

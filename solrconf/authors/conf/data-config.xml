@@ -1,0 +1,22 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource" 
+              driver="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/citeseerx" 
+              user="root" 
+              password=""/>
+  <document>
+    <entity name="author"  
+      pk="id"
+      query="SELECT id, cluster, name, affil, address, email, ord, paperid from authors"
+      >
+      <field column="id" name="id"/>
+      <field column="cluster" name="cluster"/>
+      <field column="name" name="name"/>
+      <field column="affil" name="affil"/>
+      <field column="address" name="address"/>
+      <field column="email" name="email"/>
+      <field column="ord" name="ord"/>
+      <field column="paperid" name="paperid"/>
+     </entity>
+  </document>
+</dataConfig>

@@ -1,0 +1,18 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource" 
+              driver="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/citeseerx" 
+              user="root" 
+              password=""/>
+  <document>
+    <entity name="tag"
+      pk="id"
+      query="SELECT id, paperid, tag, count from tags"
+      >
+      <field column="id" name="id"/>
+      <field column="paperid" name="paperid"/>
+      <field column="tag" name="tag"/>
+      <field column="count" name="count"/>
+     </entity>
+  </document>
+</dataConfig>

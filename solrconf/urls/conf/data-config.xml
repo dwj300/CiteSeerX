@@ -1,0 +1,17 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource" 
+              driver="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/citeseerx" 
+              user="root" 
+              password=""/>
+  <document>
+    <entity name="url"  
+      pk="id"
+      query="SELECT id, url, paperid from urls"
+      >
+      <field column="id" name="id"/>
+      <field column="url" name="url"/>
+      <field column="paperid" name="paperid"/>
+     </entity>
+  </document>
+</dataConfig>

@@ -1,0 +1,38 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource" 
+              driver="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/citeseerx" 
+              user="root" 
+              password=""/>
+  <document>
+    <entity name="paper"  
+      pk="id"
+      query="select id, version, cluster, title, abstract, year, venue, venueType, pages, volume, number, publisher, pubAddress, tech, public, ncites, versionName, crawlDate, repositoryID, conversionTrace, selfCites, versionTime from papers"
+      deltaImportQuery="SELECT id, version, cluster, title, abstract, year, venue, venueType, pages, volume, number, publisher, pubAddress, tech, public, ncites, versionName, crawlDate, repositoryID, conversionTrace, selfCites, versionTime from papers WHERE id='${dih.delta.id}'"
+      deltaQuery="SELECT id FROM papers  WHERE versionTime > '${dih.last_index_time}'"
+      >
+      <field column="id" name="id"/>
+      <field column="version" name="version"/>
+      <field column="cluster" name="cluster"/>
+      <field column="title" name="title"/>
+      <field column="abstract" name="abstract"/>
+      <field column="year" name="year"/>
+      <field column="venue" name="venue"/>
+      <field column="venueType" name="venueType"/>
+      <field column="pages" name="pages"/>
+      <field column="volume" name="volume"/>
+      <field column="number" name="number"/>
+      <field column="publisher" name="publisher"/>
+      <field column="pubAddress" name="pubAddress"/>
+      <field column="tech" name="tech"/>
+      <field column="public" name="public"/>
+      <field column="ncites" name="ncites"/>
+      <field column="versionName" name="versionName"/>
+      <field column="crawlDate" name="crawlDate"/>
+      <field column="repositoryID" name="repositoryID"/>
+      <field column="conversionTrace" name="conversionTrace"/>
+      <field column="selfCites" name="selfCites"/>
+      <field column="versionTime" name="versionTime"/>
+    </entity>
+  </document>
+</dataConfig>

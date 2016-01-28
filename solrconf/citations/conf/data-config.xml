@@ -1,0 +1,31 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource" 
+              driver="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/citeseerx" 
+              user="root" 
+              password=""/>
+  <document>
+    <entity name="citation"  
+      pk="id"
+      query="SELECT id, cluster, authors, title, venue, venueType, year, pages, editors, publisher, pubAddress, volume, number, tech, raw, paperid, self from citations"
+      >
+      <field column="id" name="id"/>
+      <field column="cluster" name="cluster"/>
+      <field column="authors" name="authors"/>
+      <field column="title" name="title"/>
+      <field column="venue" name="venue"/>
+      <field column="venueType" name="venueType"/>
+      <field column="year" name="year"/>
+      <field column="pages" name="pages"/>
+      <field column="editors" name="editors"/>
+      <field column="publisher" name="publisher"/>
+      <field column="pubAddress" name="pubAddress"/>
+      <field column="volume" name="volume"/>
+      <field column="number" name="number"/>
+      <field column="tech" name="tech"/>
+      <field column="raw" name="raw"/>
+      <field column="paperid" name="paperid"/>
+      <field column="self" name="self"/>
+     </entity>
+  </document>
+</dataConfig>
