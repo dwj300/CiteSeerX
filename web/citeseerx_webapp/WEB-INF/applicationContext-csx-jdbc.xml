@@ -159,7 +159,7 @@
   <bean id="csxTxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
-  
+ 
   <bean id="citeGraphDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
     <property name="driverClassName" value="${jdbc.citegraph.driverClassName}"/>
     <property name="url" value="${jdbc.citegraph.url}"/>

@@ -1,6 +1,7 @@
 package edu.psu.citeseerx.dao2;
 
 import edu.psu.citeseerx.domain.Author;
+import edu.psu.citeseerx.domain.Hub;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -43,4 +44,29 @@ public class HubSolrImpl extends HubDAOImpl {
 
         return urls;
     }
+
+    @Override
+    public List<Hub> getHubs(String doi) throws DataAccessException {
+        if (solr == null) {
+            solr = new HttpSolrClient(SOLR_URL);
+        }
+
+        SolrQuery query = new SolrQuery();
+        query.setQuery("paperid:\"" + doi + "\"");
+        QueryResponse resp = null;
+        try {
+            resp = solr.query(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        List<Hub> hubs = new ArrayList<Hub>();
+
+        for (SolrDocument doc : resp.getResults()) {
+            Hub hub = new Hub();
+            hub.setUrl(doc.getFieldValue("url").toString());
+        }
+
+        return hubs;
+    }  //- getHubs
 }
