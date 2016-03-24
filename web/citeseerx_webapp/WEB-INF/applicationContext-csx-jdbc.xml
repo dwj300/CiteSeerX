@@ -35,6 +35,7 @@
   
   <bean id="ackDAO" class="edu.psu.citeseerx.dao2.AckSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
+    <property name="solrUrl" value="${nosql.url}"/>
   </bean>
 
   <bean id="adminDAO" class="edu.psu.citeseerx.dao2.AdminDAOImpl" lazy-init="true">
@@ -43,10 +44,12 @@
 
   <bean id="authorDAO" class="edu.psu.citeseerx.dao2.AuthorSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
+    <property name="solrUrl" value="${nosql.url}"/>
   </bean>
 
   <bean id="citationDAO" class="edu.psu.citeseerx.dao2.CitationSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
+    <property name="solrUrl" value="${nosql.url}"/>
   </bean>
 
   <bean id="citeChartDAO" class="edu.psu.citeseerx.dao2.CiteChartDAOImpl" lazy-init="true">
@@ -55,6 +58,7 @@
 
   <bean id="docDAO" class="edu.psu.citeseerx.dao2.DocumentSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
+    <property name="solrUrl" value="${nosql.url}"/>
   </bean>
 
   <bean id="fileDAO" class="edu.psu.citeseerx.dao2.FileDAOImpl" lazy-init="true">
@@ -68,10 +72,12 @@
 
   <bean id="hubDAO" class="edu.psu.citeseerx.dao2.HubSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
+    <property name="solrUrl" value="${nosql.url}"/>
   </bean>
 
   <bean id="keywordDAO" class="edu.psu.citeseerx.dao2.KeywordSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
+    <property name="solrUrl" value="${nosql.url}"/>
   </bean>
 
   <bean id="legacyIDDAO" class="edu.psu.citeseerx.dao2.LegacyIDDAOImpl" lazy-init="true">
@@ -80,6 +86,7 @@
 
   <bean id="tagDAO" class="edu.psu.citeseerx.dao2.TagSolrImpl" lazy-init="true">
     <property name="dataSource" ref="csxDataSource"/>
+    <property name="solrUrl" value="${nosql.url}"/>
   </bean>
 
   <bean id="versionDAO" class="edu.psu.citeseerx.dao2.VersionDAOImpl" lazy-init="true">

@@ -16,15 +16,19 @@ import java.util.List;
  */
 public class KeywordSolrImpl extends KeywordDAOImpl {
 
-    private static String SOLR_URL = "http://localhost:8983/solr/keywords";
+    private String solrUrl;
     private SolrClient solr;
+
+    public void setSolrUrl(String solrUrl) {
+        this.solrUrl = solrUrl + "keywords";
+    }
 
     @Override
     public List<Keyword> getKeywords(String doi, boolean getSource)
             throws DataAccessException {
 
         if (solr == null) {
-            solr = new HttpSolrClient(SOLR_URL);
+            solr = new HttpSolrClient(solrUrl);
         }
 
         SolrQuery query = new SolrQuery();

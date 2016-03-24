@@ -17,12 +17,16 @@ import java.util.List;
  */
 public class TagSolrImpl extends TagDAOImpl {
 
-    private static String SOLR_URL = "http://localhost:8983/solr/tags";
+    private static String solrUrl;
     private SolrClient solr;
+
+    public void setSolrUrl(String solrUrl) {
+        this.solrUrl = solrUrl + "tags";
+    }
 
     public List<Tag> getTags(String doi) throws DataAccessException {
         if (solr == null) {
-            solr = new HttpSolrClient(SOLR_URL);
+            solr = new HttpSolrClient(solrUrl);
         }
 
         SolrQuery query = new SolrQuery();

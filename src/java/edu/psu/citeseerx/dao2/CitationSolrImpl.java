@@ -16,15 +16,19 @@ import java.util.List;
  */
 public class CitationSolrImpl extends CitationDAOImpl {
 
-    private static String SOLR_URL = "http://localhost:8983/solr/citations";
+    private String solrUrl;
     private SolrClient solr;
+
+    public void setSolrUrl(String solrUrl) {
+        this.solrUrl = solrUrl + "citations";
+    }
 
     @Override
     public List<Citation> getCitations(String doi, boolean withContexts)
             throws DataAccessException {
 
         if (solr == null) {
-            solr = new HttpSolrClient(SOLR_URL);
+            solr = new HttpSolrClient(solrUrl);
         }
 
         SolrQuery query = new SolrQuery();

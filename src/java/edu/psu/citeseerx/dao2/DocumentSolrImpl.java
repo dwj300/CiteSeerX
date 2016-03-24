@@ -21,11 +21,16 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
      * @see edu.psu.citeseerx.dao2.DocumentDAO#getDocument(java.lang.String, boolean)
      */
 
-    private static String SOLR_URL = "http://localhost:8983/solr/papers";
+    private String solrUrl;
 
-    private static String NGRAM_SOLR_URL = "http://localhost:8983/solr/ngrams";
+    private String NGRAM_SOLR_URL;
     private SolrClient solr;
     private SolrClient ngramSolr;
+
+    public void setSolrUrl(String solrUrl) {
+        this.solrUrl = solrUrl + "papers";
+        this.NGRAM_SOLR_URL = solrUrl + "ngrams";
+    }
 
     @Override
     public Document getDocument(String doi, boolean getSource)
@@ -33,7 +38,7 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
         // todo: use a bean
         // todo: handle getsource
         if (solr == null) {
-            solr = new HttpSolrClient(SOLR_URL);
+            solr = new HttpSolrClient(solrUrl);
         }
 
         SolrQuery query = new SolrQuery();

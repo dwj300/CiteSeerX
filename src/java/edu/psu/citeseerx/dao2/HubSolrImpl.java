@@ -18,13 +18,17 @@ import java.util.List;
  */
 public class HubSolrImpl extends HubDAOImpl {
 
-    private static String SOLR_URL = "http://localhost:8983/solr/urls";
+    private String solrUrl;
     private SolrClient solr;
+
+    public void setSolrUrl(String solrUrl) {
+        this.solrUrl = solrUrl + "urls";
+    }
 
     @Override
     public List<String> getUrls(String doi) throws DataAccessException {
         if (solr == null) {
-            solr = new HttpSolrClient(SOLR_URL);
+            solr = new HttpSolrClient(solrUrl);
         }
 
         SolrQuery query = new SolrQuery();
@@ -48,7 +52,7 @@ public class HubSolrImpl extends HubDAOImpl {
     @Override
     public List<Hub> getHubs(String doi) throws DataAccessException {
         if (solr == null) {
-            solr = new HttpSolrClient(SOLR_URL);
+            solr = new HttpSolrClient(solrUrl);
         }
 
         SolrQuery query = new SolrQuery();

@@ -15,14 +15,18 @@ import java.util.List;
  */
 public class AckSolrImpl extends AckDAOImpl {
 
-    private static String SOLR_URL = "http://localhost:8983/solr/acknowledgments";
+    private String solrUrl; //"http://localhost:8983/solr/acknowledgments";
     private SolrClient solr;
+
+    public void setSolrUrl(String solrUrl) {
+        this.solrUrl = solrUrl + "acknowledgments";
+    }
 
     @Override
     public List<Acknowledgment> getAcknowledgments(String doi, boolean withContexts,
                                                    boolean withSource) throws DataAccessException {
         if (solr == null) {
-            solr = new HttpSolrClient(SOLR_URL);
+            solr = new HttpSolrClient(solrUrl);
         }
 
         // Todo: deal with context / source

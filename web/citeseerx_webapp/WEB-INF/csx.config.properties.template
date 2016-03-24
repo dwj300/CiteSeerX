@@ -155,3 +155,6 @@ csx.disambiguation.aff_model=medline_aff.prune.model
 csx.disambiguation.lname_model=medline_lastname.prune.model
 csx.disambiguation.name_stopwords=name_stopwords.txt
 
+### Solr NoSQL URL
+nosql.url="localhost:8080/solr/"
+
