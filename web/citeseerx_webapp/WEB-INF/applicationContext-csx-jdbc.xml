@@ -160,7 +160,7 @@
 
 
   <!-- =================== TRANSACTION CONFIGURATION ==================== -->
-  
+  <!--
   <tx:advice id="csxTxAdvice" transaction-manager="csxTxManager">
     <tx:attributes>
       <tx:method name="get*" read-only="true"/>
@@ -178,7 +178,7 @@
   <bean id="csxTxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="csxDataSource"/>
   </bean>
- 
+ -->
   <bean id="citeGraphDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
     <property name="driverClassName" value="${jdbc.citegraph.driverClassName}"/>
     <property name="url" value="${jdbc.citegraph.url}"/>
