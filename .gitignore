@@ -1,5 +1,3 @@
-.*
-
 !.gitignore
 
 # Java
@@ -62,6 +60,12 @@ web/citeseerx_webapp/WEB-INF/lib/citeseerx.jar
 *.xdy
 *.tdo
 
-# intelij
-*.idea
+# Intelij
+.idea/*
 *.iml
+out/*
+
+# Source control
+.svn
+
+*.pyc
