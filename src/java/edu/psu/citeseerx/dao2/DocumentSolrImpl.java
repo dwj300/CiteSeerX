@@ -53,6 +53,7 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
         }
 
         if (resp.getResults().getNumFound() == 0) {
+            System.out.println("no results found for doi:" + doi);
             return null;
         }
         SolrDocument solrDoc = resp.getResults().get(0);
