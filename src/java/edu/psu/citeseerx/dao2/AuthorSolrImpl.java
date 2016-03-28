@@ -47,7 +47,10 @@ public class AuthorSolrImpl extends AuthorDAOImpl {
             auth.setClusterID((long) doc.getFieldValue("cluster"));
             auth.setDatum(Author.NAME_KEY, doc.getFieldValue("name").toString());
             auth.setDatum(Author.AFFIL_KEY, doc.getFieldValue("affil").toString());
-            auth.setDatum(Author.ADDR_KEY, doc.getFieldValue("address").toString());
+            addr = doc.getFieldValue("address");
+            if (addr) {
+                auth.setDatum(Author.ADDR_KEY, addr.toString());
+            }
             auth.setDatum(Author.EMAIL_KEY, doc.getFieldValue("email").toString());
             auth.setDatum(Author.ORD_KEY, doc.getFieldValue("ord").toString());
             authors.add(auth);
