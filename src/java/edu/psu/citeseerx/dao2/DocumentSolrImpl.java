@@ -71,14 +71,40 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
             }
         }
 
-        doc.setDatum(Document.DOI_KEY, solrDoc.getFieldValue("id").toString());
-        doc.setVersion((int)solrDoc.getFieldValue("version"));
-        doc.setClusterID((long)solrDoc.getFieldValue("cluster"));
+        Object id = solrDoc.getFieldValue("id");
+        Object version = solrDoc.getFieldValue("version");
+        Object cluster = solrDoc.getFieldValue("cluster");
+        Object ncites = solrDoc.getFieldValue("ncites");
+        Object selfCites = solrDoc.getFieldValue("selfCites");
+        Object versionName = solrDoc.getFieldValue("versionName");
+        Object state = solrDoc.getFieldValue("public");
+        Object versionTime = solrDoc.getFieldValue("versionTime");
 
-        doc.setNcites((int)solrDoc.getFieldValue("ncites"));
-        doc.setSelfCites((int)solrDoc.getFieldValue("selfCites"));
-        doc.setVersionName(solrDoc.getFieldValue("versionName").toString());
-        doc.setState((int)solrDoc.getFieldValue("public"));
+        if (id != null) {
+            doc.setDatum(Document.DOI_KEY, id.toString());    
+        }
+        if (version != null) {
+            doc.setVersion((int)version);    
+        }
+        if (cluster != null) {
+            doc.setClusterID((long)cluster);
+        }
+        if (ncites != null) {
+            doc.setNcites((int)ncites);
+        }
+        if (selfCites != null) {
+            doc.setSelfCites((int)selfCites);
+        }
+        if (versionName != null) {
+            doc.setVersionName(versionName.toString());
+        }
+        if (state != null) {
+            doc.setState((int)state);
+        }
+        if (versionTime != null) {
+            doc.setVersionTime((Date)versionTime);
+        }
+        
 /*
             if (rs.getBoolean("public")) {
                 doc.setState(DocumentProperties.IS_PUBLIC);
@@ -87,7 +113,7 @@ public class DocumentSolrImpl extends DocumentDAOImpl {
                 doc.setState(DocumentProperties.LOGICAL_DELETE);
             }
 */
-        doc.setVersionTime((Date)solrDoc.getFieldValue("versionTime"));
+        
 
         DocumentFileInfo finfo = new DocumentFileInfo();
         finfo.setDatum(DocumentFileInfo.CRAWL_DATE_KEY, DateFormat.getDateInstance().format((Date)solrDoc.getFieldValue("crawlDate")));
