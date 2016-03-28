@@ -43,16 +43,37 @@ public class AuthorSolrImpl extends AuthorDAOImpl {
 
         for (SolrDocument doc : resp.getResults()) {
             Author auth = new Author();
-            auth.setDatum(Author.DOI_KEY, doc.getFieldValue("id").toString());
-            auth.setClusterID((long) doc.getFieldValue("cluster"));
-            auth.setDatum(Author.NAME_KEY, doc.getFieldValue("name").toString());
-            auth.setDatum(Author.AFFIL_KEY, doc.getFieldValue("affil").toString());
+            Object id = doc.getFieldValue("id");
+            Object cluster = doc.getFieldValue("cluster");
+            Object name = doc.getFieldValue("name");
+            Object affil = doc.getFieldValue("affil");
             Object addr = doc.getFieldValue("address");
+            Object email = doc.getFieldValue("email");
+            Object ord = doc.getFieldValue("ord");
+
+            if (id != null) {
+                auth.setDatum(Author.DOI_KEY, id.toString());
+            }
+            if (cluster != null) {
+                auth.setClusterID((long)cluster);
+            }
+            if (name != null) {
+                auth.setDatum(Author.NAME_KEY, name.toString());
+            }
+
+            if (affil != null) {
+                auth.setDatum(Author.AFFIL_KEY, affil.toString());    
+            }
             if (addr != null) {
                 auth.setDatum(Author.ADDR_KEY, addr.toString());
             }
-            auth.setDatum(Author.EMAIL_KEY, doc.getFieldValue("email").toString());
-            auth.setDatum(Author.ORD_KEY, doc.getFieldValue("ord").toString());
+            if (email != null) {
+                auth.setDatum(Author.EMAIL_KEY, email.toString());    
+            }
+            if (ord != null) {
+                auth.setDatum(Author.ORD_KEY, ord.toString());    
+            }
+            
             authors.add(auth);
         }
 
