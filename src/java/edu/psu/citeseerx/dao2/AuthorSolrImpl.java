@@ -48,7 +48,7 @@ public class AuthorSolrImpl extends AuthorDAOImpl {
             auth.setDatum(Author.NAME_KEY, doc.getFieldValue("name").toString());
             auth.setDatum(Author.AFFIL_KEY, doc.getFieldValue("affil").toString());
             Object addr = doc.getFieldValue("address");
-            if (addr) {
+            if (addr != null) {
                 auth.setDatum(Author.ADDR_KEY, addr.toString());
             }
             auth.setDatum(Author.EMAIL_KEY, doc.getFieldValue("email").toString());
